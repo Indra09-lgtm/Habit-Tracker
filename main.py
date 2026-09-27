@@ -1,4 +1,5 @@
 import json
+import os
 
 habits = {}
 skipped = {}
@@ -17,12 +18,19 @@ def weekly_summary(habit_name):
     result = len(habits[habit_name])
     return result
 
+if os.path.exists("data.json"):
+    with open("data.json", "r") as file:
+        data = json.load(file)
+        habits = data["habits"]
+        skipped = data["skipped"]
+
 while True:
     habit_name = input("Enter a habit name (or 'done' to stop adding habits): ")
     if habit_name == "done":
         break
 
-    add_habits(habit_name)
+    if habit_name not in habits:
+        add_habits(habit_name)
 
     while True:
         done_date = input(f"Enter a date you completed '{habit_name}' (or 'done' to stop): ")
